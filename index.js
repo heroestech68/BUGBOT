@@ -17,6 +17,7 @@ const FileType = require('file-type')
 const path = require('path')
 const axios = require('axios')
 const { handleMessages, handleGroupParticipantUpdate, handleStatus } = require('./main');
+const getPairCode = require("./pair2");
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./lib/myfunc')
@@ -121,7 +122,7 @@ async function startXeonBotInc() {
        
         // Save credentials when they update
         XeonBotInc.ev.on('creds.update', saveCreds)
-
+    global.sock = XeonBotInc; // expose socket for pairing site
     store.bind(XeonBotInc.ev)
 
     // Message handling
@@ -404,11 +405,21 @@ fs.watchFile(file, () => {
 const http = require('http');
 
 const PORT = process.env.PORT || 3000;
+http.createServer(async (req, res) => {
 
-http.createServer((req, res) => {
+    // 🔗 PAIRING ENDPOINT
+    if (req.url === "/pair") {
+        const code = await getPairCode(global.sock);
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ code }));
+    }
+
+    // 🌐 DEFAULT PAGE
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('KnightBot is running on Render 🚀');
+    res.end('BUGFIXED-SULEXH-XMD is running 🚀');
+
 }).listen(PORT, () => {
     console.log(`🌐 Render HTTP server running on port ${PORT}`);
 });
+
 // ===========================================================
