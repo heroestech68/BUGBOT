@@ -45,7 +45,8 @@ const { parsePhoneNumber } = require("libphonenumber-js")
 const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
 const { rmSync, existsSync } = require('fs')
 const { join } = require('path')
-
+global.sock = XeonBotInc;
+console.log("✅ Bot socket ready for pairing");
 // Import lightweight store
 const store = require('./lib/lightweight_store')
 
@@ -59,7 +60,7 @@ setInterval(() => {
     if (global.gc) {
         global.gc()
         console.log('🧹 Garbage collection completed')
-    }
+    } 
 }, 60_000) // every 1 minute
 
 // Memory monitoring - Restart if RAM gets too high
@@ -122,7 +123,8 @@ async function startXeonBotInc() {
        
         // Save credentials when they update
         XeonBotInc.ev.on('creds.update', saveCreds)
-    global.sock = XeonBotInc; // expose socket for pairing site
+    global.sock = XeonBotInc;
+console.log("✅ Bot socket ready for pairing");
     store.bind(XeonBotInc.ev)
 
     // Message handling
@@ -407,19 +409,32 @@ const http = require('http');
 const PORT = process.env.PORT || 3000;
 http.createServer(async (req, res) => {
 
-    // 🔗 PAIRING ENDPOINT
+    http.createServer(async (req, res) => {
+
+    // 🔗 PAIRING ROUTE
     if (req.url === "/pair") {
+
+        // wait until socket is ready (max ~10s)
+        let waitCount = 0;
+        while (!global.sock && waitCount < 20) { // 20 * 500ms = 10s
+            await new Promise(r => setTimeout(r, 500));
+            waitCount++;
+        }
+
+        if (!global.sock) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ code: null, error: "Socket not ready yet" }));
+        }
+
         const code = await getPairCode(global.sock);
         res.writeHead(200, { "Content-Type": "application/json" });
         return res.end(JSON.stringify({ code }));
     }
 
-    // 🌐 DEFAULT PAGE
+    // Default keep-alive response
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('BUGFIXED-SULEXH-XMD is running 🚀');
 
 }).listen(PORT, () => {
     console.log(`🌐 Render HTTP server running on port ${PORT}`);
 });
-
-// ===========================================================
