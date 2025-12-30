@@ -28,6 +28,8 @@ async function settingsCommand(sock, chatId, message) {
         const autoStatus = readJsonSafe(`${dataDir}/autoStatus.json`, { enabled: false });
         const autoread = readJsonSafe(`${dataDir}/autoread.json`, { enabled: false });
         const autotyping = readJsonSafe(`${dataDir}/autotyping.json`, { enabled: false });
+        const autorecording = readJsonSafe(`${dataDir}/autorecording.json`, { enabled: false });
+        const alwaysoffline = readJsonSafe(`${dataDir}/alwaysoffline.json`, { enabled: false });
         const pmblocker = readJsonSafe(`${dataDir}/pmblocker.json`, { enabled: false });
         const anticall = readJsonSafe(`${dataDir}/anticall.json`, { enabled: false });
         const userGroupData = readJsonSafe(`${dataDir}/userGroupData.json`, {
@@ -54,7 +56,6 @@ async function settingsCommand(sock, chatId, message) {
         lines.push(`• PM Blocker: ${pmblocker.enabled ? 'ON' : 'OFF'}`);
         lines.push(`• Anticall: ${anticall.enabled ? 'ON' : 'OFF'}`);
         lines.push(`• Auto Reaction: ${autoReaction ? 'ON' : 'OFF'}`);
-        lines.push(`• Autotyping: ${autotyping.enabled ? 'ON' : 'OFF'}`);
         lines.push(`• Autorecording: ${autorecording.enabled ? 'ON' : 'OFF'}`);
         lines.push(`• Awaysoffline: ${alwaysoffline.enabled ? 'ON' : 'OFF'}`);
         if (groupId) {
