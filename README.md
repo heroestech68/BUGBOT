@@ -10,10 +10,10 @@ This is a WhatsApp bot built using the Baileys library for group management, inc
 </div> <!-- AUTOPLAY GIF --><div align="center">
   <img src="https://files.catbox.moe/wc3hy5.mp4" width="600" alt="Bugfixed Sulexh XMD Demo"/>
 </div><div align="center">
-  <img src="https://img.shields.io/github/followers/mruniquehacker?style=for-the-badge&label=Followers" alt="Followers"/>
-  <img src="https://img.shields.io/github/stars/mruniquehacker/Knightbot-MD?style=for-the-badge&label=Stars" alt="Stars"/>
-  <img src="https://img.shields.io/github/forks/mruniquehacker/Knightbot-MD?style=for-the-badge&label=Forks" alt="Forks"/>
-  <img src="https://img.shields.io/github/watchers/mruniquehacker/Knightbot-MD?style=for-the-badge&label=Watchers" alt="Watchers"/>
+  <img src="https://img.shields.io/github/followers/heroestech68?style=for-the-badge&label=Followers" alt="Followers"/>
+  <img src="https://img.shields.io/github/stars/heroestech68/BUGBOT?style=for-the-badge&label=Stars" alt="Stars"/>
+  <img src="https://img.shields.io/github/forks/heroestech68/BUGBOT?style=for-the-badge&label=Forks" alt="Forks"/>
+  <img src="https://img.shields.io/github/watchers/heroestech68/BUGBOT?style=for-the-badge&label=Watchers" alt="Watchers"/>
 </div>
 ---
 
