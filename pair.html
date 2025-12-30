@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WhatsApp Bot Pairing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="
+  background:#0f172a;
+  color:white;
+  font-family:Arial;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+">
+
+<div style="
+  background:#020617;
+  padding:25px;
+  width:320px;
+  border-radius:10px;
+  text-align:center;
+">
+
+  <h3>WhatsApp Bot Pairing</h3>
+  <p>Click below to generate pairing code</p>
+
+  <button onclick="pair()" style="
+    background:#22c55e;
+    border:none;
+    padding:12px;
+    width:100%;
+    font-size:16px;
+    border-radius:6px;
+    cursor:pointer;
+  ">
+    Generate Code
+  </button>
+
+  <div id="code" style="
+    margin-top:15px;
+    font-size:22px;
+    letter-spacing:3px;
+    color:#38bdf8;
+  ">
+    ----
+  </div>
+
+  <small style="display:block;margin-top:10px">
+    WhatsApp → Linked Devices → Link with code
+  </small>
+
+</div>
+
+<script>
+async function pair() {
+  document.getElementById("code").innerText = "Loading...";
+  try {
+    const res = await fetch("/pair");
+    const data = await res.json();
+    document.getElementById("code").innerText =
+      data.code || "ERROR";
+  } catch {
+    document.getElementById("code").innerText = "SERVER ERROR";
+  }
+}
+</script>
+
+</body>
+  </html>
