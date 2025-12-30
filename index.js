@@ -118,7 +118,17 @@ async function startXeonBotInc() {
             connectTimeoutMs: 60000,
             keepAliveIntervalMs: 10000,
         })
+       sock.ev.on('messages.upsert', async ({ messages }) => {
+    const message = messages[0];
+    if (!message?.message) return;
 
+    // 🔥 APPLY AlwaysOffline BEFORE ANY RECEIPTS
+    if (await handleAlwaysOffline(sock, message)) {
+        return;
+    }
+
+    // continue normal bot logic below...
+});
         // Save credentials when they update
         XeonBotInc.ev.on('creds.update', saveCreds)
 
