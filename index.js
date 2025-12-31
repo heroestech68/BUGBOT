@@ -17,7 +17,6 @@ const FileType = require('file-type')
 const path = require('path')
 const axios = require('axios')
 const { handleMessages, handleGroupParticipantUpdate, handleStatus } = require('./main');
-const getPairCode = require("./pair2");
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./lib/myfunc')
@@ -45,8 +44,7 @@ const { parsePhoneNumber } = require("libphonenumber-js")
 const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
 const { rmSync, existsSync } = require('fs')
 const { join } = require('path')
-global.sock = XeonBotInc;
-console.log("✅ Bot socket ready for pairing");
+
 // Import lightweight store
 const store = require('./lib/lightweight_store')
 
@@ -60,7 +58,7 @@ setInterval(() => {
     if (global.gc) {
         global.gc()
         console.log('🧹 Garbage collection completed')
-    } 
+    }
 }, 60_000) // every 1 minute
 
 // Memory monitoring - Restart if RAM gets too high
@@ -107,7 +105,7 @@ async function startXeonBotInc() {
                 creds: state.creds,
                 keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
             },
-            markOnlineOnConnect: false,
+            markOnlineOnConnect: true,
             generateHighQualityLinkPreview: true,
             syncFullHistory: false,
             getMessage: async (key) => {
@@ -120,11 +118,16 @@ async function startXeonBotInc() {
             connectTimeoutMs: 60000,
             keepAliveIntervalMs: 10000,
         })
-       
+       sock.ev.on('messages.upsert', async ({ messages }) => {
+    const message = messages[0];
+    if (!message?.message) return;
+
+
+    // continue normal bot logic below...
+});
         // Save credentials when they update
         XeonBotInc.ev.on('creds.update', saveCreds)
-    global.sock = XeonBotInc;
-console.log("✅ Bot socket ready for pairing");
+
     store.bind(XeonBotInc.ev)
 
     // Message handling
@@ -407,34 +410,11 @@ fs.watchFile(file, () => {
 const http = require('http');
 
 const PORT = process.env.PORT || 3000;
-http.createServer(async (req, res) => {
 
-    http.createServer(async (req, res) => {
-
-    // 🔗 PAIRING ROUTE
-    if (req.url === "/pair") {
-
-        // wait until socket is ready (max ~10s)
-        let waitCount = 0;
-        while (!global.sock && waitCount < 20) { // 20 * 500ms = 10s
-            await new Promise(r => setTimeout(r, 500));
-            waitCount++;
-        }
-
-        if (!global.sock) {
-            res.writeHead(500, { "Content-Type": "application/json" });
-            return res.end(JSON.stringify({ code: null, error: "Socket not ready yet" }));
-        }
-
-        const code = await getPairCode(global.sock);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ code }));
-    }
-
-    // Default keep-alive response
+http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('BUGFIXED-SULEXH-XMD is running 🚀');
-
+    res.end('KnightBot is running on Render 🚀');
 }).listen(PORT, () => {
     console.log(`🌐 Render HTTP server running on port ${PORT}`);
 });
+// ===========================================================
